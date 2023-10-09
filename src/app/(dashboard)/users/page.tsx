@@ -1,3 +1,4 @@
+import { useQuery } from "@tanstack/react-query";
 import { Payment, columns } from "./columns";
 import { DataTable } from "./data-table";
 
@@ -190,15 +191,28 @@ async function getData(): Promise<Payment[]> {
 
 export default async function DemoPage() {
   const data = await getData();
+  const { data: users, isLoading } = useQuery({
+    queryFn: () => fetch("/api/users"),
+    queryKey: ["users"],
+  });
 
+  console.log("HELLO");
+
+  console.log(users);
+
+  // if (isLoading) {
+  //   return <div>Loading...</div>;
+  // }
   return (
     <>
       <div className="flex items-center justify-between space-y-2">
         <h2 className="text-3xl font-bold tracking-tight">Users</h2>
       </div>
       <div className=" mx-auto ">
-        <DataTable columns={columns} data={data} />
+        <DataTable columns={columns} data={data as any} />
       </div>
     </>
   );
+
+  return <pre>{}</pre>;
 }
